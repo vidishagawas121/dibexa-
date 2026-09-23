@@ -46,6 +46,7 @@ export const companyConfig: CompanyData = {
   mission: "To deliver smart, customized AI solutions that drive business excellence and operational efficiency across the global market.",
   headquarters: "City Vista, A 305, Downtown Rd, Ashoka Nagar, Kharadi, Pune, Maharashtra 411014, India",
   email: "dibexainfotech@gmail.com",
+  phone: "+91 95276 05805",
   website: "https://dibexa.com",
   foundedYear: null, // [FOUNDED YEAR — TO BE CONFIRMED]
   companySize: "Startup",
