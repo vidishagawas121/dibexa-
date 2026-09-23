@@ -146,8 +146,8 @@ To secure your site with a free SSL certificate (`https://`):
 # Install Certbot and the Nginx plugin
 sudo apt install -y certbot python3-certbot-nginx
 
-# Obtain and automatically install SSL certificate
-sudo certbot --nginx -d your-domain.com -d www.your-domain.com
+# Obtain and automatically install SSL certificate for dibexa.com
+sudo certbot --nginx -d dibexa.com -d www.dibexa.com
 ```
 Follow the on-screen prompts. Certbot will configure automatic renewal.
 
