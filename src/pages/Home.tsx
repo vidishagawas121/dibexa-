@@ -1,302 +1,219 @@
 import { Helmet } from 'react-helmet-async';
-
 import { Link } from 'react-router-dom';
-import { ArrowRight, ChevronRight, CheckCircle2, Shield, Zap, Server } from 'lucide-react';
-import { motion, type Variants } from 'framer-motion';
-import { allServices } from '../data/services';
+import { Sparkles, ArrowRight, Terminal, Code2, Cpu } from 'lucide-react';
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import AnimatedPage from '../components/layout/AnimatedPage';
 import Button from '../components/ui/Button';
-import { siteImages } from '../data/images';
+import InteractiveAIDemo from '../components/ui/InteractiveAIDemo';
+import Hero3DCore from '../components/ui/Hero3DCore';
+import ProcessRoadmap from '../components/ui/ProcessRoadmap';
+import ROICalculator from '../components/ui/ROICalculator';
+import WhatsAppDemo from '../components/ui/WhatsAppDemo';
+import { fadeUpVariants, heroContainerVariants } from '../lib/motion';
 
 export default function Home() {
-  const fadeUpVariants: Variants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
-  };
-  
-  const staggerContainer: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1 }
-    }
-  };
+  const shouldReduceMotion = useReducedMotion();
+  const activeHeroVariants = shouldReduceMotion ? undefined : heroContainerVariants;
+  const activeFadeUp = shouldReduceMotion ? undefined : fadeUpVariants;
+
+  // Cinematic Parallax setup
+  const { scrollY } = useScroll();
+  const hero3DY = useTransform(scrollY, [0, 1000], [0, 300]);
+  const heroTextY = useTransform(scrollY, [0, 1000], [0, 150]);
+  const heroOpacity = useTransform(scrollY, [0, 600], [1, 0]);
 
   return (
-    <>
+    <AnimatedPage className="bg-slate-50 font-sans min-h-screen text-slate-900 overflow-hidden relative dark:bg-[#010103] dark:text-white">
       <Helmet>
-        <title>Dibexa Infotech Pvt. Ltd. | Build. Automate. Scale.</title>
-        <meta name="description" content="DiBexa is a technology startup building intelligent digital solutions that help businesses automate, scale, and create real impact." />
+        <title>Dibexa - Smart AI for Business Excellence.</title>
+        <meta name="description" content="Dibexa is an agile AI software startup based in Pune, currently engineering our core AI systems and infrastructure." />
       </Helmet>
 
-      {/* 01 — HERO (STATIC IMAGE WITH PRECISE IMAGE MAP) */}
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.98, filter: 'blur(10px)' }}
-        animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-        transition={{ duration: 1, ease: "easeOut" }}
-        className="relative w-full h-[400px] md:h-auto md:aspect-[1672/824] bg-[#f8f9fb] overflow-hidden"
+      {/* Global Aurora Glass / Logo Ultimate Background Accents for Home */}
+      <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[70%] bg-cyan-300/30 blur-[120px] rounded-full pointer-events-none dark:bg-[#00F0FF]/10 dark:blur-[150px]" />
+      <div className="absolute top-[20%] right-[-10%] w-[50%] h-[60%] bg-violet-400/20 blur-[120px] rounded-full pointer-events-none dark:bg-[#8A2BE2]/10 dark:blur-[150px]" />
+
+      {/* Hero Section */}
+      <motion.section 
+        style={{ opacity: heroOpacity }}
+        className="relative min-h-[90vh] flex flex-col items-center justify-center pt-32 pb-20"
       >
-        {/* 
-          Inner container locks aspect ratio on mobile to preserve invisible hitboxes.
-          It scales to 400px height, pushing the right side (laptop) off-screen, 
-          but perfectly framing the text and buttons on the left. 
-        */}
-        <div className="absolute top-0 left-[-15px] md:left-0 h-full aspect-[1672/824] md:w-full md:h-full md:static">
-          <img 
-            src="/images/dibexa-homepage-hero.png" 
-            alt="Dibexa Homepage" 
-            className="w-full h-full object-cover object-left md:object-center"
-          />
-          
-          {/* Shimmer / Light Ray Sweep Animation */}
-          <div className="absolute inset-0 pointer-events-none overflow-hidden mix-blend-overlay z-0">
-            <motion.div 
-              animate={{ x: ['-200%', '300%'] }}
-              transition={{ duration: 4, ease: "easeInOut", repeat: Infinity, repeatDelay: 4 }}
-              className="absolute top-0 bottom-0 w-1/4 bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-[-30deg]"
-            />
-          </div>
+        
+        {/* 3D Core Visualization Background (Parallaxed) */}
+        <motion.div style={{ y: hero3DY }} className="absolute inset-0 z-0 pointer-events-none">
+          <Hero3DCore />
+        </motion.div>
 
-          {/* Precise Invisible Link Map */}
-          <div className="absolute inset-0 z-10 w-full h-full">
-            {/* Hero Buttons with Interactive Hover Feedback */}
-            <Link to="/contact" className="absolute top-[71%] left-[5%] w-[18%] h-[8%] cursor-pointer group" title="Let's Build Together">
-              <span className="absolute inset-0 bg-white/0 group-hover:bg-white/20 transition-all duration-300 rounded-[4px]"></span>
-            </Link>
-            <Link to="/services" className="absolute top-[71%] left-[23.5%] w-[14%] h-[8%] cursor-pointer group" title="Our Solutions">
-              <span className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all duration-300 rounded-[4px]"></span>
-            </Link>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* 02 — POSITIONING / INTRODUCTION */}
-      <section className="py-16 md:py-24 lg:py-32 bg-white border-b border-[var(--color-border-light)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-16">
-            <div className="lg:col-span-8">
-              <motion.h2 
-                initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeUpVariants}
-                className="text-3xl md:text-4xl lg:text-5xl font-light leading-tight text-balance text-[var(--color-text-primary)]"
-              >
-                Technology should not merely support business; it must <strong className="font-bold text-[var(--color-brand-navy)]">simplify complexity, accelerate execution, and engineer limitless scalability.</strong>
-              </motion.h2>
-            </div>
-            <motion.div 
-              initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer}
-              className="lg:col-span-4 border-l border-[var(--color-brand-blue)] pl-8 space-y-10"
-            >
-              <motion.div variants={fadeUpVariants}>
-                <h4 className="text-xs font-bold tracking-[0.2em] uppercase text-[var(--color-text-secondary)] mb-2">Clients</h4>
-                <p className="text-lg font-medium text-[var(--color-brand-navy)] italic" title="To be confirmed">[CLIENTS — TO BE CONFIRMED]</p>
-              </motion.div>
-              <motion.div variants={fadeUpVariants}>
-                <h4 className="text-xs font-bold tracking-[0.2em] uppercase text-[var(--color-text-secondary)] mb-2">Project Experience</h4>
-                <p className="text-lg font-medium text-[var(--color-brand-navy)] italic" title="To be confirmed">[PROJECT EXPERIENCE — TO BE CONFIRMED]</p>
-              </motion.div>
-              <motion.div variants={fadeUpVariants}>
-                <h4 className="text-xs font-bold tracking-[0.2em] uppercase text-[var(--color-text-secondary)] mb-2">Certifications</h4>
-                <p className="text-lg font-medium text-[var(--color-brand-navy)] italic" title="To be confirmed">[CERTIFICATIONS — TO BE CONFIRMED]</p>
-              </motion.div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* 03 — CORE CAPABILITIES / SERVICES PREVIEW */}
-      <section className="py-16 md:py-24 lg:py-32 bg-[var(--color-surface-alt)] border-b border-[var(--color-border-light)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-16">
-            <div className="max-w-2xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-brand-navy)] tracking-tight mb-4">
-                Core Capabilities
-              </h2>
-              <p className="text-lg text-[var(--color-text-secondary)]">
-                We engineer specialized solutions across the full digital spectrum to solve specific business constraints.
-              </p>
-            </div>
-            <Link to="/services" className="inline-flex items-center gap-2 text-[var(--color-brand-navy)] font-bold uppercase tracking-wide text-sm hover:text-[var(--color-brand-blue)] transition-colors border-b-2 border-transparent hover:border-[var(--color-brand-blue)] pb-1">
-              VIEW ALL SERVICES <ArrowRight size={16} />
-            </Link>
-          </div>
-
+        <motion.div style={{ y: heroTextY }} className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <motion.div 
-            initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={staggerContainer}
-            className="grid grid-cols-1 md:grid-cols-2 gap-8"
+            initial="hidden" 
+            animate="visible" 
+            variants={activeHeroVariants}
+            className="space-y-8 flex flex-col items-center"
           >
-            {allServices.slice(0, 4).map((service) => (
-              <motion.div key={service.slug} variants={fadeUpVariants} className="h-full">
-                <Link 
-                  to={`/services/${service.slug}`} 
-                  className="group p-8 bg-white border border-[var(--color-border-light)] hover:border-[var(--color-brand-blue)] transition-all duration-300 flex flex-col h-full"
-                >
-                  <div className="flex justify-between items-start mb-6">
-                    <h3 className="text-2xl font-bold text-[var(--color-brand-navy)] pr-4 group-hover:text-[var(--color-brand-blue)] transition-colors">
-                      {service.title}
-                    </h3>
-                    <div className="w-10 h-10 rounded-full bg-[var(--color-surface-alt)] flex items-center justify-center shrink-0 group-hover:bg-[var(--color-brand-blue)] group-hover:text-white transition-colors">
-                      <ChevronRight size={20} />
-                    </div>
-                  </div>
-                  <p className="text-[var(--color-text-secondary)] leading-relaxed flex-1">
-                    {service.description}
-                  </p>
-                </Link>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* 04 — METHODOLOGY / HOW WE WORK */}
-      <section className="py-16 md:py-24 lg:py-32 bg-white border-b border-[var(--color-border-light)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-brand-navy)] tracking-tight mb-4">
-              Methodical Execution.
-            </h2>
-            <p className="text-lg text-[var(--color-text-secondary)] max-w-2xl">
-              We reject guesswork. Our delivery framework is rooted in stringent engineering principles, ensuring complex initiatives move from conceptualization to production with precision.
-            </p>
-          </div>
-
-          <motion.div 
-            initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={staggerContainer}
-            className="grid grid-cols-1 md:grid-cols-4 gap-0 border-y border-l border-[var(--color-border-light)]"
-          >
-            {[
-              { num: '01', title: 'Understand', desc: 'Deep business analysis, requirement mapping, and constraint identification.' },
-              { num: '02', title: 'Architect', desc: 'Designing secure, scalable, and resilient technical foundations.' },
-              { num: '03', title: 'Engineer', desc: 'Disciplined development driven by continuous integration and automated testing.' },
-              { num: '04', title: 'Evolve', desc: 'Ongoing optimization, performance scaling, and lifecycle management.' }
-            ].map((step, i) => (
-              <motion.div variants={fadeUpVariants} key={i} className="p-8 border-r border-b md:border-b-0 border-[var(--color-border-light)] hover:bg-[var(--color-surface-alt)] transition-colors">
-                <span className="text-[var(--color-brand-teal)] font-mono text-sm block mb-6 font-semibold">{step.num}</span>
-                <h3 className="text-xl font-bold text-[var(--color-brand-navy)] mb-4">{step.title}</h3>
-                <p className="text-[var(--color-text-secondary)] leading-relaxed text-sm">{step.desc}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* 05 — ENGINEERING PRINCIPLES */}
-      <section className="py-16 md:py-24 lg:py-32 bg-[var(--color-brand-navy)] text-white relative overflow-hidden">
-        <div className="absolute inset-0 z-0 opacity-5 pointer-events-none">
-          <img 
-            src={siteImages.patternBackground} 
-            alt="" 
-            className="w-full h-full object-cover"
-          />
-        </div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
-              Engineering by Design.
-            </h2>
-            <p className="text-lg text-[var(--color-text-inverse-muted)] max-w-2xl">
-              We do not build disposable software. Dibexa operates on foundational principles that ensure technology serves as a permanent leverage point for the enterprise.
-            </p>
-          </div>
-
-          <motion.div 
-            initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={staggerContainer}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12"
-          >
-            {[
-              { icon: <CheckCircle2 />, title: 'Business-First', desc: 'Technology choices are dictated by business objectives and operational ROI.' },
-              { icon: <Shield />, title: 'Secure Foundation', desc: 'Vulnerability mitigation and data compliance engineered in from day one.' },
-              { icon: <Zap />, title: 'Automation Mandate', desc: 'Maximizing human capital by automating repetitive execution across operations.' },
-              { icon: <Server />, title: 'Built to Scale', desc: 'Modern topologies designed to remain performant under massive enterprise growth.' },
-            ].map((principle, i) => (
-              <motion.div variants={fadeUpVariants} key={i}>
-                <div className="text-[var(--color-brand-teal)] mb-6">
-                  {principle.icon}
-                </div>
-                <h3 className="text-xl font-bold mb-4">{principle.title}</h3>
-                <p className="text-[var(--color-text-inverse-muted)] leading-relaxed text-sm">
-                  {principle.desc}
-                </p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* 06 — INDUSTRIES PREVIEW */}
-      <section className="py-16 md:py-24 bg-white border-b border-[var(--color-border-light)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-brand-navy)] tracking-tight mb-6">
-            Industries We Empower
-          </h2>
-          <p className="text-lg text-[var(--color-text-secondary)] max-w-2xl mx-auto mb-12">
-            We deliver domain-specific digital transformation across critical sectors.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4 mb-12">
-            {['Healthcare', 'Finance', 'Manufacturing', 'Retail', 'Logistics', 'Energy & Utilities', 'Telecommunications', 'PropTech'].map((ind) => (
-              <span key={ind} className="px-6 py-3 border border-[var(--color-border-light)] bg-[var(--color-surface-alt)] text-[var(--color-brand-navy)] font-semibold text-sm tracking-wide">
-                {ind}
+            <motion.div variants={activeFadeUp} className="inline-flex items-center gap-3 px-6 py-2 bg-gradient-to-r from-blue-600/10 to-cyan-500/10 border border-blue-200/50 rounded-full shadow-lg backdrop-blur-xl dark:from-[#00F0FF]/10 dark:to-[#0055FF]/10 dark:border-[#00F0FF]/30 dark:shadow-[0_0_30px_rgba(0,240,255,0.15)] group hover:scale-105 transition-transform duration-300">
+              <span className="flex h-3 w-3 relative">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75 dark:bg-[#00F0FF]"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-600 dark:bg-[#00F0FF]"></span>
               </span>
-            ))}
-          </div>
-          <Link to="/industries" className="inline-flex items-center gap-2 text-[var(--color-brand-navy)] font-bold uppercase tracking-wide text-sm hover:text-[var(--color-brand-blue)] transition-colors border-b-2 border-transparent hover:border-[var(--color-brand-blue)] pb-1">
-            EXPLORE ALL INDUSTRIES <ArrowRight size={16} />
-          </Link>
-        </div>
-      </section>
-
-      {/* 07 — OUR PRODUCTS */}
-      <section className="py-16 md:py-24 bg-[var(--color-surface-alt)] border-b border-[var(--color-border-light)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-16 items-center">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-brand-navy)] tracking-tight mb-6">
-                Our Products.
-              </h2>
-              <p className="text-lg text-[var(--color-text-secondary)] mb-8">
-                Explore our suite of AI-powered products designed for the modern enterprise. Details coming soon.
-              </p>
-              <Link to="/products" className="inline-flex items-center gap-2 text-[var(--color-brand-navy)] font-bold uppercase tracking-wide text-sm hover:text-[var(--color-brand-blue)] transition-colors border-b-2 border-transparent hover:border-[var(--color-brand-blue)] pb-1">
-                VIEW OUR PRODUCTS <ArrowRight size={16} />
-              </Link>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {[1, 2].map((prod) => (
-                <div key={prod} className="bg-white border border-[var(--color-border-light)] p-8 text-center flex flex-col justify-center items-center opacity-50">
-                  <div className="w-12 h-12 bg-gray-200 rounded-full mb-4"></div>
-                  <span className="font-medium text-[var(--color-brand-navy)]">Product Name</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 08 — FINAL CTA */}
-      <section className="py-20 md:py-32 bg-[var(--color-brand-blue)] text-white relative overflow-hidden">
-        <div className="absolute inset-0 z-0 opacity-10 pointer-events-none">
-          <img 
-            src={siteImages.ctaBackground} 
-            alt="" 
-            className="w-full h-full object-cover mix-blend-overlay"
-          />
-        </div>
-        <motion.div 
-          initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}
-          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10"
-        >
-          <motion.h2 variants={fadeUpVariants} className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
-            LET'S BUILD WHAT'S NEXT.
-          </motion.h2>
-          <motion.p variants={fadeUpVariants} className="text-xl text-[var(--color-text-inverse-muted)] max-w-2xl mx-auto mb-10">
-            Engage our engineering team to solve your most complex operational and technical challenges.
-          </motion.p>
-          <motion.div variants={fadeUpVariants}>
-            <Button as={Link} to="/contact" size="lg" className="bg-white text-[var(--color-brand-navy)] hover:bg-gray-100 rounded-none font-bold tracking-wider px-10 h-14 uppercase text-[11px]">
-              GET IN TOUCH &rarr;
-            </Button>
+              <span className="text-sm font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-cyan-600 dark:from-[#00F0FF] dark:to-white tracking-wide uppercase">
+                Enterprise-Grade AI Automation
+              </span>
+            </motion.div>
+            
+            {/* 
+              CRITICAL RULE: DO NOT CHANGE THIS HEADLINE UNDER ANY CIRCUMSTANCES.
+              It is hardlocked to "Smart AI for Business Excellence." as per strict user instruction.
+            */}
+            <motion.h1 variants={activeFadeUp} className="text-5xl sm:text-6xl md:text-7xl font-extrabold text-slate-900 leading-[1.1] tracking-tight dark:text-white">
+              Smart AI for <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-[var(--color-brand-cyan)] dark:from-[#00F0FF] dark:via-[#0055FF] dark:to-[#8A2BE2]">
+                Business Excellence.
+              </span>
+            </motion.h1>
+            
+            <motion.p variants={activeFadeUp} className="text-lg sm:text-xl text-slate-600 leading-relaxed max-w-2xl text-balance mx-auto font-medium dark:text-slate-400 dark:font-mono">
+              We engineer secure, robust AI software solutions designed to eliminate operational bottlenecks, reduce manual overhead, and accelerate growth for modern businesses.
+            </motion.p>
+            
+            <motion.div variants={activeFadeUp} className="flex flex-col sm:flex-row gap-4 pt-4 justify-center">
+              <Button as={Link} to="/contact" variant="primary" size="lg" className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-xl shadow-blue-500/20 px-8 hover:opacity-90 dark:from-[#00F0FF] dark:via-[#0055FF] dark:to-[#8A2BE2] dark:shadow-[0_0_20px_rgba(0,85,255,0.4)] dark:font-mono dark:tracking-widest">
+                Express your requirement
+                <ArrowRight size={16} className="ml-2" />
+              </Button>
+              <Button as={Link} to="/services" variant="outline" size="lg" className="bg-white/60 backdrop-blur-md border-slate-200 text-slate-700 hover:bg-white hover:text-slate-900 px-8 shadow-sm dark:bg-transparent dark:border-[#00F0FF]/50 dark:text-[#00F0FF] dark:hover:bg-[#00F0FF]/10 dark:font-mono dark:tracking-widest">
+                Explore Services
+              </Button>
+            </motion.div>
           </motion.div>
         </motion.div>
+      </motion.section>
+
+      {/* Interactive Live AI Demo Section */}
+      <section className="relative z-20 pb-24 pt-8 md:pt-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+           <motion.div
+             initial={{ opacity: 0, y: 40 }}
+             whileInView={{ opacity: 1, y: 0 }}
+             viewport={{ once: true }}
+             transition={{ duration: 0.8 }}
+           >
+             <InteractiveAIDemo />
+           </motion.div>
+        </div>
       </section>
-    </>
+
+      {/* Path to Excellence / Process Roadmap */}
+      <ProcessRoadmap />
+
+      {/* 04 — ROI Calculator */}
+      <ROICalculator />
+
+      {/* 05 — WhatsApp Local AI Demo */}
+      <WhatsAppDemo />
+
+      {/* Focus Areas */}
+      <section className="py-24 relative z-10 border-t border-slate-200/50 bg-white/20 backdrop-blur-3xl dark:bg-[#030408]/80 dark:border-[#0055FF]/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-4 dark:text-white">Current Engineering Focus</h2>
+            <p className="text-slate-600 font-medium dark:text-slate-400 dark:font-mono">What we are actively building and optimizing.</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Focus 1 */}
+            <div className="p-8 rounded-3xl bg-white/40 backdrop-blur-xl border border-white/60 shadow-xl shadow-blue-900/5 hover:-translate-y-2 hover:shadow-2xl hover:shadow-blue-500/20 hover:border-blue-300 transition-all duration-300 group dark:bg-[#05060A]/80 dark:border-[#0055FF]/30 dark:shadow-[0_10px_30px_-15px_rgba(0,85,255,0.2)] dark:hover:border-[#0055FF]/80 relative overflow-hidden">
+              <div className="absolute inset-0 bg-grid-dark opacity-[0.03] pointer-events-none dark:opacity-10" />
+              <div className="relative z-10">
+                <div className="w-14 h-14 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 mb-6 group-hover:scale-110 transition-transform shadow-sm dark:bg-[#0055FF]/10 dark:border-[#0055FF]/40 dark:text-[#0055FF]">
+                  <Code2 size={26} />
+                </div>
+                <h3 className="text-xl font-extrabold text-slate-900 mb-3 dark:text-white">AI Infrastructure</h3>
+                <p className="text-sm text-slate-600 leading-relaxed font-medium dark:text-slate-400 dark:font-mono">
+                  Developing the foundational architecture for scalable, low-latency machine learning model deployment and data ingestion pipelines.
+                </p>
+              </div>
+            </div>
+
+            {/* Focus 2 */}
+            <div className="p-8 rounded-3xl bg-white/40 backdrop-blur-xl border border-white/60 shadow-xl shadow-blue-900/5 hover:-translate-y-2 hover:shadow-2xl hover:shadow-cyan-500/20 hover:border-cyan-300 transition-all duration-300 group dark:bg-[#05060A]/80 dark:border-[#00F0FF]/30 dark:shadow-[0_10px_30px_-15px_rgba(0,240,255,0.15)] dark:hover:border-[#00F0FF]/80 relative overflow-hidden">
+              <div className="absolute inset-0 bg-grid-dark opacity-[0.03] pointer-events-none dark:opacity-10" />
+              <div className="relative z-10">
+                <div className="w-14 h-14 rounded-2xl bg-cyan-50 border border-cyan-100 flex items-center justify-center text-cyan-600 mb-6 group-hover:scale-110 transition-transform shadow-sm dark:bg-[#00F0FF]/10 dark:border-[#00F0FF]/40 dark:text-[#00F0FF]">
+                  <Terminal size={26} />
+                </div>
+                <h3 className="text-xl font-extrabold text-slate-900 mb-3 dark:text-white">Custom Workflow Automation</h3>
+                <p className="text-sm text-slate-600 leading-relaxed font-medium dark:text-slate-400 dark:font-mono">
+                  Prototyping multi-agent systems designed to automate complex, multi-step business processes with human-in-the-loop oversight.
+                </p>
+              </div>
+            </div>
+
+            {/* Focus 3 */}
+            <div className="p-8 rounded-3xl bg-white/40 backdrop-blur-xl border border-white/60 shadow-xl shadow-blue-900/5 hover:-translate-y-2 hover:shadow-2xl hover:shadow-violet-500/20 hover:border-violet-300 transition-all duration-300 group dark:bg-[#05060A]/80 dark:border-[#8A2BE2]/30 dark:shadow-[0_10px_30px_-15px_rgba(138,43,226,0.2)] dark:hover:border-[#8A2BE2]/80 relative overflow-hidden">
+              <div className="absolute inset-0 bg-grid-dark opacity-[0.03] pointer-events-none dark:opacity-10" />
+              <div className="relative z-10">
+                <div className="w-14 h-14 rounded-2xl bg-violet-50 border border-violet-100 flex items-center justify-center text-violet-600 mb-6 group-hover:scale-110 transition-transform shadow-sm dark:bg-[#8A2BE2]/10 dark:border-[#8A2BE2]/40 dark:text-[#8A2BE2]">
+                  <Sparkles size={26} />
+                </div>
+                <h3 className="text-xl font-extrabold text-slate-900 mb-3 dark:text-white">Cognitive Systems</h3>
+                <p className="text-sm text-slate-600 leading-relaxed font-medium dark:text-slate-400 dark:font-mono">
+                  Fine-tuning private, highly-specialized language models that understand domain-specific corporate data without data leakage.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Industries We Serve (Quick Overview) */}
+      <section className="py-24 relative z-10 border-t border-slate-200/50 bg-slate-50 dark:bg-[#010103]/80 dark:border-[#0055FF]/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-4 dark:text-white">Industries We Transform</h2>
+            <p className="text-slate-600 font-medium max-w-2xl mx-auto dark:text-slate-400 dark:font-mono">
+              We build agnostic AI systems that adapt to complex data environments across multiple verticals.
+            </p>
+          </div>
+          
+          <div className="flex flex-wrap justify-center gap-4">
+            {['Manufacturing & Supply Chain', 'Healthcare & MedTech', 'Financial Services', 'E-Commerce & Retail', 'Legal & Compliance'].map((industry) => (
+              <div key={industry} className="px-6 py-3 rounded-full bg-white border border-slate-200 text-slate-700 font-bold text-sm shadow-sm hover:border-blue-500 hover:text-blue-600 transition-colors cursor-default dark:bg-[#05060A] dark:border-[#0055FF]/30 dark:text-[#00F0FF] dark:font-mono dark:hover:border-[#8A2BE2] dark:hover:text-[#8A2BE2]">
+                {industry}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* High-Impact Bottom CTA */}
+      <section className="py-24 text-center border-t border-slate-200/50 bg-slate-900 relative overflow-hidden dark:bg-[#020204] dark:border-[#0055FF]/20">
+        
+        <div className="absolute inset-0 bg-grid-dark opacity-10 pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-500/10 blur-[150px] rounded-full pointer-events-none dark:bg-[#0055FF]/20" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-cyan-400/10 blur-[100px] rounded-full pointer-events-none dark:bg-[#00F0FF]/20" />
+
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8 }}
+          className="max-w-3xl mx-auto px-4 relative z-10"
+        >
+          <div className="w-20 h-20 rounded-3xl bg-blue-500/10 border border-blue-400/20 flex items-center justify-center mx-auto mb-8 shadow-lg shadow-blue-500/20 backdrop-blur-md">
+            <Cpu size={36} className="text-cyan-400" />
+          </div>
+          <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6 tracking-tight">Ready to evolve your business?</h2>
+          <p className="text-lg text-slate-300 mb-10 max-w-xl mx-auto font-medium">
+            Let's discuss how custom AI can eliminate bottlenecks and multiply your operational efficiency.
+          </p>
+          <Button as={Link} to="/contact" variant="primary" className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-[0_0_30px_rgba(0,180,255,0.4)] hover:shadow-[0_0_40px_rgba(0,180,255,0.6)] px-10 py-4 dark:from-[#00F0FF] dark:via-[#0055FF] dark:to-[#8A2BE2] dark:shadow-[0_0_30px_rgba(0,85,255,0.5)] border-0 text-lg">
+            Book a Free Consultation
+            <ArrowRight size={18} className="ml-2" />
+          </Button>
+        </motion.div>
+      </section>
+
+    </AnimatedPage>
   );
 }

@@ -1,179 +1,140 @@
 import { Link } from 'react-router-dom';
+
 import Logo from '../components/ui/Logo';
-import { allServices } from '../data/services';
+import { useTheme } from '../contexts/ThemeContext';
 import { companyConfig } from '../data/company';
-import { IconFacebook, IconLinkedIn, IconInstagram, IconYouTube, IconWhatsApp } from '../components/ui/SocialIcons';
-import { siteImages } from '../data/images';
+import { IconFacebook, IconInstagram, IconLinkedIn, IconWhatsApp, IconYouTube } from '../components/ui/SocialIcons';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const { theme } = useTheme();
 
   return (
-    <footer className="bg-[var(--color-brand-navy)] text-white pt-16 md:pt-24 pb-12 border-t border-white/10 relative overflow-hidden">
-      {/* Footer Pattern Background */}
-      <div className="absolute inset-0 z-0 opacity-5 pointer-events-none">
-        <img 
-          src={siteImages.footerPattern} 
-          alt="" 
-          className="w-full h-full object-cover"
-        />
-      </div>
+    <footer className="bg-slate-50 text-slate-900 pt-10 pb-8 relative overflow-hidden border-t border-slate-200/60 dark:bg-[#020204] dark:text-white dark:border-[#0055FF]/20">
       
+      {/* Background Glows for Dark Mode */}
+      <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-blue-500/5 blur-[120px] rounded-full pointer-events-none dark:bg-[#0055FF]/5" />
+      <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] bg-cyan-400/5 blur-[100px] rounded-full pointer-events-none dark:bg-[#00F0FF]/5" />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 mb-12 md:mb-20">
+        
+        {/* Main Footer Grid - Standard Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12 mb-12">
           
-          <div className="lg:col-span-4 space-y-6">
-            <Logo className="mb-6" useWhiteLogo={true} />
-            <p className="text-[var(--color-text-inverse-muted)] text-sm leading-relaxed max-w-sm">
-              {companyConfig.description || "Dibexa Infotech Pvt. Ltd. is a technology and digital solutions company that helps organizations build modern digital systems, automate operations, and scale efficiently."}
+          {/* Brand & Socials */}
+          <div className="lg:col-span-5 flex flex-col space-y-6">
+            <Logo 
+              className="mb-1" 
+              useWhiteLogo={theme === 'dark'}
+              cropForHeader={true}
+              imageClassName="max-w-[160px] sm:max-w-[180px]"
+            />
+            <p className="text-slate-600 text-sm leading-relaxed max-w-sm dark:text-slate-400 dark:font-mono">
+              {companyConfig.description || "Enterprise-grade AI solutions for complex business challenges. We build intelligent systems that move the needle."}
             </p>
-            <p className="text-white font-semibold text-sm tracking-widest uppercase">
-              Build. Automate. Scale.
-            </p>
+            
+            <div className="flex space-x-4 pt-2">
+              <a href={companyConfig.socialLinks.facebook || '#'} className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-blue-600 hover:text-white transition-all dark:bg-slate-900 dark:text-slate-400 dark:hover:bg-blue-500 dark:hover:text-white">
+                <IconFacebook className="w-4 h-4" />
+              </a>
+              <a href={companyConfig.socialLinks.instagram || '#'} className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-pink-600 hover:text-white transition-all dark:bg-slate-900 dark:text-slate-400 dark:hover:bg-pink-500 dark:hover:text-white">
+                <IconInstagram className="w-4 h-4" />
+              </a>
+              <a href={companyConfig.socialLinks.linkedin || '#'} className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-blue-700 hover:text-white transition-all dark:bg-slate-900 dark:text-slate-400 dark:hover:bg-[#00F0FF] dark:hover:text-slate-900">
+                <IconLinkedIn className="w-4 h-4" />
+              </a>
+              <a href={companyConfig.socialLinks.youtube || '#'} className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-red-600 hover:text-white transition-all dark:bg-slate-900 dark:text-slate-400 dark:hover:bg-red-500 dark:hover:text-white">
+                <IconYouTube className="w-4 h-4" />
+              </a>
+              <a href={companyConfig.socialLinks.whatsapp || '#'} className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-emerald-600 hover:text-white transition-all dark:bg-slate-900 dark:text-slate-400 dark:hover:bg-emerald-500 dark:hover:text-white">
+                <IconWhatsApp className="w-4 h-4" />
+              </a>
+            </div>
           </div>
 
-          <div className="lg:col-span-2">
-            <h3 className="text-white font-bold mb-6 tracking-wide">Company</h3>
-            <ul className="space-y-4">
-              {['About', 'Careers', 'Services', 'Industries', 'Products', 'Contact'].map((item) => (
-                <li key={item}>
-                  <Link 
-                    to={`/${item.toLowerCase()}`}
-                    className="text-[var(--color-text-inverse-muted)] hover:text-white transition-colors text-sm font-medium"
-                  >
-                    {item}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="lg:col-span-3">
-            <h3 className="text-white font-bold mb-6 tracking-wide">Featured Services</h3>
-            <ul className="space-y-4">
-              {[
-                "AI MVP Development",
-                "Generative AI Integration",
-                "AI Workflow Automation",
-                "Intelligent Conversational Agents",
-                "AI Transformation Consulting"
-              ].map((serviceTitle) => {
-                const srv = allServices.find(s => s.title === serviceTitle) || { slug: '' };
-                return (
-                  <li key={serviceTitle}>
-                    <Link 
-                      to={`/services/${srv.slug}`}
-                      className="text-[var(--color-text-inverse-muted)] hover:text-white transition-colors text-sm font-medium"
-                    >
-                      {serviceTitle}
+          {/* Links Grid */}
+          <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-8">
+            
+            {/* Services */}
+            <div className="flex flex-col space-y-4">
+              <h4 className="text-xs font-bold uppercase tracking-widest text-slate-900 dark:text-slate-500 dark:font-mono">Services</h4>
+              <ul className="space-y-3">
+                {[
+                  { name: 'Predictive Analytics', path: '/services' },
+                  { name: 'Data Automation', path: '/services' },
+                  { name: 'NLP & Chatbots', path: '/services' },
+                  { name: 'Custom AI Models', path: '/services' }
+                ].map((link, i) => (
+                  <li key={i}>
+                    <Link to={link.path} className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors dark:text-slate-400 dark:hover:text-[#00F0FF] dark:font-mono">
+                      {link.name}
                     </Link>
                   </li>
-                );
-              })}
-              <li className="pt-2">
-                <Link to="/services" className="text-[var(--color-brand-teal)] hover:text-white transition-colors text-sm font-bold uppercase tracking-wider flex items-center gap-1">
-                  View All Services &rarr;
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div className="lg:col-span-3 space-y-8">
-            <div>
-              <h3 className="text-sm font-semibold uppercase tracking-widest text-[var(--color-brand-blue)] mb-6">Contact</h3>
-              <ul className="space-y-4">
-                <li>
-                  <a href={`mailto:${companyConfig.email}`} className="text-[var(--color-text-inverse-muted)] hover:text-white transition-colors text-sm">
-                    {companyConfig.email}
-                  </a>
-                </li>
-                <li>
-                  {companyConfig.phone ? (
-                    <a href={`tel:${companyConfig.phone.replace(/[^0-9+]/g, '')}`} className="text-[var(--color-text-inverse-muted)] hover:text-white transition-colors text-sm">
-                      {companyConfig.phone}
-                    </a>
-                  ) : (
-                    <span className="text-[var(--color-text-inverse-muted)]/50 text-sm italic" title="To be confirmed">
-                      [Phone — To be confirmed]
-                    </span>
-                  )}
-                </li>
-                <li className="text-[var(--color-text-inverse-muted)] text-sm pt-2">
-                  {companyConfig.headquarters}
-                </li>
+                ))}
               </ul>
             </div>
-            
-            <div>
-              <h3 className="text-sm font-semibold uppercase tracking-widest text-[var(--color-brand-blue)] mb-4">Follow Dibexa</h3>
-              <div className="flex items-center space-x-4">
-                {/* Facebook */}
-                <a 
-                  href={companyConfig.socialLinks.facebook || '#'} 
-                  onClick={(e) => !companyConfig.socialLinks.facebook && e.preventDefault()}
-                  className={`text-[var(--color-text-inverse-muted)] transition-colors ${companyConfig.socialLinks.facebook ? 'hover:text-white' : 'opacity-50 cursor-default'}`}
-                  aria-label="Facebook"
-                  title={companyConfig.socialLinks.facebook ? 'Facebook' : 'Facebook - To be provided'}
-                >
-                  <IconFacebook className="w-5 h-5" />
-                </a>
-                
-                {/* LinkedIn */}
-                <a 
-                  href={companyConfig.socialLinks.linkedin || '#'} 
-                  onClick={(e) => !companyConfig.socialLinks.linkedin && e.preventDefault()}
-                  className={`text-[var(--color-text-inverse-muted)] transition-colors ${companyConfig.socialLinks.linkedin ? 'hover:text-white' : 'opacity-50 cursor-default'}`}
-                  aria-label="LinkedIn"
-                  title={companyConfig.socialLinks.linkedin ? 'LinkedIn' : 'LinkedIn - To be provided'}
-                >
-                  <IconLinkedIn className="w-5 h-5" />
-                </a>
-                
-                {/* Instagram */}
-                <a 
-                  href={companyConfig.socialLinks.instagram || '#'} 
-                  onClick={(e) => !companyConfig.socialLinks.instagram && e.preventDefault()}
-                  className={`text-[var(--color-text-inverse-muted)] transition-colors ${companyConfig.socialLinks.instagram ? 'hover:text-white' : 'opacity-50 cursor-default'}`}
-                  aria-label="Instagram"
-                  title={companyConfig.socialLinks.instagram ? 'Instagram' : 'Instagram - To be provided'}
-                >
-                  <IconInstagram className="w-5 h-5" />
-                </a>
-                
-                {/* YouTube */}
-                <a 
-                  href={companyConfig.socialLinks.youtube || '#'} 
-                  onClick={(e) => !companyConfig.socialLinks.youtube && e.preventDefault()}
-                  className={`text-[var(--color-text-inverse-muted)] transition-colors ${companyConfig.socialLinks.youtube ? 'hover:text-white' : 'opacity-50 cursor-default'}`}
-                  aria-label="YouTube"
-                  title={companyConfig.socialLinks.youtube ? 'YouTube' : 'YouTube - To be provided'}
-                >
-                  <IconYouTube className="w-5 h-5" />
-                </a>
-                
-                {/* WhatsApp */}
-                <a 
-                  href={companyConfig.socialLinks.whatsapp || '#'} 
-                  onClick={(e) => !companyConfig.socialLinks.whatsapp && e.preventDefault()}
-                  className={`text-[var(--color-text-inverse-muted)] transition-colors ${companyConfig.socialLinks.whatsapp ? 'hover:text-white' : 'opacity-50 cursor-default'}`}
-                  aria-label="WhatsApp"
-                  title={companyConfig.socialLinks.whatsapp ? 'WhatsApp' : 'WhatsApp - To be provided'}
-                >
-                  <IconWhatsApp className="w-5 h-5" />
-                </a>
-              </div>
+
+            {/* Company */}
+            <div className="flex flex-col space-y-4">
+              <h4 className="text-xs font-bold uppercase tracking-widest text-slate-900 dark:text-slate-500 dark:font-mono">Company</h4>
+              <ul className="space-y-3">
+                {[
+                  { name: 'About Us', path: '/about' },
+                  { name: 'Careers', path: '/careers' },
+                  { name: 'Products', path: '/products' },
+                  { name: 'Contact Sales', path: '/contact' }
+                ].map((link, i) => (
+                  <li key={i}>
+                    <Link to={link.path} className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors dark:text-slate-400 dark:hover:text-[#00F0FF] dark:font-mono">
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
+
+            {/* Legal */}
+            <div className="flex flex-col space-y-4">
+              <h4 className="text-xs font-bold uppercase tracking-widest text-slate-900 dark:text-slate-500 dark:font-mono">Legal</h4>
+              <ul className="space-y-3">
+                {[
+                  { name: 'Privacy Policy', path: '/privacy-policy' },
+                  { name: 'Terms of Service', path: '/terms-conditions' },
+                  { name: 'DPDP Act', path: '/privacy-policy' }
+                ].map((link, i) => (
+                  <li key={i}>
+                    <Link to={link.path} className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors dark:text-slate-400 dark:hover:text-[#00F0FF] dark:font-mono">
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
           </div>
         </div>
 
-        <div className="border-t border-[var(--color-border-dark)] pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-[var(--color-text-inverse-muted)]">
-            © {currentYear} Dibexa Infotech Pvt. Ltd. All rights reserved.
-          </p>
-          <div className="flex space-x-8 text-sm">
-            <Link to="/privacy-policy" className="text-[var(--color-text-inverse-muted)] hover:text-white transition-colors">Privacy Policy</Link>
-            <Link to="/terms-conditions" className="text-[var(--color-text-inverse-muted)] hover:text-white transition-colors">Terms & Conditions</Link>
+        {/* Bottom Bar */}
+        <div className="border-t border-slate-200/80 pt-8 flex flex-col lg:flex-row justify-between items-center gap-6 dark:border-[#0055FF]/20">
+          
+          <div className="flex flex-col sm:flex-row items-center gap-4 text-sm text-slate-500 dark:text-slate-500 dark:font-mono text-center sm:text-left">
+            <span>© {currentYear} {companyConfig.companyName}. All rights reserved.</span>
           </div>
+
+          <div className="flex items-center gap-4">
+            {/* System Status Indicator */}
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200 dark:bg-slate-900 dark:border-slate-800">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              <span className="text-[10px] font-mono font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest">
+                System Status: All Systems Operational
+              </span>
+            </div>
+
+          </div>
+
         </div>
       </div>
     </footer>

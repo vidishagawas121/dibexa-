@@ -1,8 +1,8 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import Header from './Header';
 import Footer from './Footer';
-import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 
 export default function Layout() {
   const { pathname } = useLocation();
@@ -15,8 +15,19 @@ export default function Layout() {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <main className="flex-grow flex flex-col">
-        <Outlet />
+      <main className="flex-grow flex flex-col relative overflow-hidden">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={pathname}
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.3, ease: 'easeOut' }}
+            className="flex-grow flex flex-col"
+          >
+            <Outlet />
+          </motion.div>
+        </AnimatePresence>
       </main>
       <Footer />
     </div>

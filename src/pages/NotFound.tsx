@@ -1,10 +1,11 @@
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
+import AnimatedPage from '../components/layout/AnimatedPage';
 import Button from '../components/ui/Button';
 
 export default function NotFound() {
   return (
-    <>
+    <AnimatedPage className="bg-slate-50 min-h-screen font-sans text-slate-900 relative dark:bg-[#010103] dark:text-white">
       <Helmet>
         <title>404: Page Not Found | Dibexa Infotech Pvt. Ltd.</title>
       </Helmet>
@@ -25,6 +26,6 @@ export default function NotFound() {
           </Button>
         </div>
       </section>
-    </>
+    </AnimatedPage>
   );
 }

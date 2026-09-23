@@ -1,163 +1,204 @@
-import { useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
-import { Globe, Building2, Workflow } from 'lucide-react';
-import { motion, useMotionValue, useSpring, useTransform, type Variants } from 'framer-motion';
-import { industriesData } from '../data/industries';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { HeartPulse, Landmark, ShoppingBag, Truck, ChevronRight, Activity, ShieldCheck, Zap, Database } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
+import AnimatedPage from '../components/layout/AnimatedPage';
+
+const industries = [
+  {
+    id: 'healthcare',
+    name: 'Healthcare & Medical',
+    icon: HeartPulse,
+    tagline: 'Precision AI for patient care and data compliance.',
+    color: 'from-emerald-400 to-cyan-500',
+    description: 'We build HIPAA-compliant AI pipelines that automate patient triaging, analyze medical imagery with high precision, and streamline hospital operations.',
+    features: [
+      { name: 'Automated Patient Triaging', icon: Activity },
+      { name: 'HIPAA Data Compliance', icon: ShieldCheck },
+      { name: 'Predictive Diagnostics', icon: Zap }
+    ]
+  },
+  {
+    id: 'finance',
+    name: 'Finance & Banking',
+    icon: Landmark,
+    tagline: 'Algorithmic intelligence for a secure financial future.',
+    color: 'from-blue-600 to-indigo-600',
+    description: 'Deploy advanced machine learning models for real-time fraud detection, algorithmic trading, and personalized wealth management without compromising security.',
+    features: [
+      { name: 'Real-time Fraud Detection', icon: ShieldCheck },
+      { name: 'Algorithmic Trading AI', icon: Activity },
+      { name: 'Automated Risk Assessment', icon: Database }
+    ]
+  },
+  {
+    id: 'ecommerce',
+    name: 'Retail & E-Commerce',
+    icon: ShoppingBag,
+    tagline: 'Hyper-personalized shopping experiences at scale.',
+    color: 'from-purple-500 to-pink-500',
+    description: 'Leverage deep learning to predict customer churn, optimize dynamic pricing models, and create intelligent recommendation engines that drive revenue.',
+    features: [
+      { name: 'Dynamic Pricing Engine', icon: Zap },
+      { name: 'Churn Prediction Models', icon: Activity },
+      { name: 'Hyper-Personalization', icon: HeartPulse }
+    ]
+  },
+  {
+    id: 'logistics',
+    name: 'Supply Chain & Logistics',
+    icon: Truck,
+    tagline: 'AI-optimized routing and predictive supply forecasting.',
+    color: 'from-amber-400 to-orange-500',
+    description: 'Transform your logistics with AI that predicts supply chain disruptions, optimizes delivery routes in real-time, and automates warehouse inventory management.',
+    features: [
+      { name: 'Route Optimization', icon: Activity },
+      { name: 'Predictive Forecasting', icon: Zap },
+      { name: 'Automated Inventory', icon: Database }
+    ]
+  },
+  {
+    id: 'manufacturing',
+    name: 'Manufacturing',
+    icon: Database,
+    tagline: 'AI-driven predictive maintenance and quality control.',
+    color: 'from-slate-500 to-slate-700',
+    description: 'Enhance your production lines with computer vision for defect detection and predictive models that foresee equipment failures before they happen.',
+    features: [
+      { name: 'Predictive Maintenance', icon: Zap },
+      { name: 'Quality Control AI', icon: ShieldCheck },
+      { name: 'Yield Optimization', icon: Activity }
+    ]
+  }
+];
 
 export default function Industries() {
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
+  const location = useLocation();
+  const initialHash = location.hash ? location.hash.replace('#', '') : null;
+  const initialTab = industries.find(ind => ind.id === initialHash) ? initialHash! : industries[0].id;
+  
+  const [activeTab, setActiveTab] = useState(initialTab);
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      const { clientX, clientY } = e;
-      const targetX = clientX - window.innerWidth / 2;
-      const targetY = clientY - window.innerHeight / 2;
-      mouseX.set(targetX);
-      mouseY.set(targetY);
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [mouseX, mouseY]);
-
-  const springConfig = { damping: 25, stiffness: 150 };
-  const smoothMouseX = useSpring(mouseX, springConfig);
-  const smoothMouseY = useSpring(mouseY, springConfig);
-
-  const x1 = useTransform(smoothMouseX, [-500, 500], [-40, 40]);
-  const y1 = useTransform(smoothMouseY, [-500, 500], [-40, 40]);
-  const x2 = useTransform(smoothMouseX, [-500, 500], [50, -50]);
-  const y2 = useTransform(smoothMouseY, [-500, 500], [50, -50]);
-
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1, delayChildren: 0.2 }
+    const hash = location.hash.replace('#', '');
+    if (hash && industries.find(ind => ind.id === hash)) {
+      setActiveTab(hash);
     }
-  };
+  }, [location.hash]);
 
-  const itemVariants: Variants = {
-    hidden: { y: 30, opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 100, damping: 20 } }
-  };
+  const activeIndustry = industries.find(ind => ind.id === activeTab) || industries[0];
 
   return (
-    <>
-      <Helmet>
-        <title>Industry Expertise | Dibexa Infotech Pvt. Ltd.</title>
-        <meta name="description" content="Explore our specialized technology engineering capabilities across key global industries including finance, healthcare, and manufacturing." />
-      </Helmet>
-
-      {/* Complex Animated Cover Section */}
-      <section className="relative min-h-[85vh] flex items-center pt-32 pb-20 overflow-hidden bg-[#0a0f1c]" data-theme="dark">
+    <AnimatedPage className="bg-slate-50 min-h-screen font-sans text-slate-900 relative dark:bg-[#010103] dark:text-white pt-32 pb-24 overflow-hidden">
+      
+      {/* Background glow for the whole page */}
+      <section className="relative px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pt-12 pb-20">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-blue-500/10 blur-[120px] rounded-full pointer-events-none" />
         
-        {/* Deep Background Gradients */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[var(--color-brand-navy)] via-[#0a0f1c] to-[#050B14] opacity-80"></div>
-        
-        {/* Abstract Grid Background */}
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03]"></div>
-
-        {/* Interactive Spotlight */}
-        <motion.div 
-          className="absolute top-0 left-0 pointer-events-none opacity-40 mix-blend-screen rounded-full blur-[120px] w-[900px] h-[900px] bg-[var(--color-brand-teal)]"
-          style={{
-            x: useTransform(smoothMouseX, x => x - 450 + (typeof window !== 'undefined' ? window.innerWidth / 2 : 0)),
-            y: useTransform(smoothMouseY, y => y - 450 + (typeof window !== 'undefined' ? window.innerHeight / 2 : 0)),
-          }}
-        />
-
-        {/* Floating Geometric Elements (Parallax) */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {/* Element 1: Glassmorphism Globe */}
-          <motion.div 
-            style={{ x: x1, y: y1 }}
-            className="absolute top-[15%] right-[10%] w-72 h-72 bg-white/[0.01] backdrop-blur-3xl border border-white/5 rounded-full rotate-12 flex items-center justify-center shadow-[0_0_50px_rgba(45,212,191,0.1)] hidden lg:flex"
+        <div className="text-center relative z-10">
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight mb-6 dark:text-white"
           >
-             <Globe className="w-32 h-32 text-[var(--color-brand-teal)] opacity-20" strokeWidth={1} />
-          </motion.div>
+            AI Solutions for <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0055FF] to-[#00F0FF]">Every Industry</span>
+          </motion.h1>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto dark:text-slate-400"
+          >
+            Generic software doesn't cut it. We architect domain-specific AI models trained to solve the exact bottlenecks holding your industry back.
+          </motion.p>
+        </div>
+      </section>
+
+      {/* Main Interactive Section */}
+      <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative z-10">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-16">
           
-          {/* Element 2: Concentric Rings */}
-          <motion.div 
-            style={{ x: x2, y: y2 }}
-            animate={{ rotate: -360 }}
-            transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
-            className="absolute -bottom-[30%] left-[10%] w-[600px] h-[600px] rounded-full border border-dashed border-[var(--color-brand-blue)]/10 hidden md:block"
-          >
-             <div className="absolute inset-10 rounded-full border border-[var(--color-brand-blue)]/5"></div>
-             <div className="absolute inset-20 rounded-full border border-dashed border-[var(--color-brand-teal)]/10"></div>
-          </motion.div>
-        </div>
-
-        {/* Infinite Marquee Background Text */}
-        <div className="absolute top-[40%] left-0 w-full overflow-hidden whitespace-nowrap opacity-[0.03] select-none pointer-events-none hidden md:block">
-          <motion.div 
-            animate={{ x: [-2000, 0] }}
-            transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
-            className="text-[16rem] font-black text-white leading-none tracking-tighter"
-          >
-            FINANCE HEALTHCARE MANUFACTURING RETAIL LOGISTICS FINANCE HEALTHCARE
-          </motion.div>
-        </div>
-
-        {/* Main Content */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-          <motion.div 
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            className="max-w-4xl"
-          >
-            <motion.div variants={itemVariants} className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-[var(--color-brand-teal)]/10 border border-[var(--color-brand-teal)]/20 backdrop-blur-md mb-8">
-              <span className="w-2 h-2 rounded-full bg-[var(--color-brand-teal)] animate-pulse shadow-[0_0_10px_var(--color-brand-teal)]"></span>
-              <span className="text-xs font-bold tracking-[0.2em] text-[var(--color-brand-teal)] uppercase">Domain Expertise</span>
-            </motion.div>
-
-            <motion.h1 variants={itemVariants} className="text-5xl sm:text-6xl md:text-8xl font-black mb-8 tracking-tight text-white leading-[1.05]">
-              Sector-Specific <br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-brand-blue)] via-[var(--color-brand-teal)] to-white">
-                Transformation
-              </span>
-            </motion.h1>
-            
-            <motion.p variants={itemVariants} className="text-xl md:text-2xl text-[#94a3b8] font-light max-w-2xl leading-relaxed mb-12">
-              We deploy highly specialized AI and enterprise architectures tailored to the unique operational, regulatory, and competitive constraints of your industry.
-            </motion.p>
-
-            <motion.div variants={itemVariants} className="flex flex-wrap items-center gap-8">
-              <div className="flex items-center gap-6 text-xs font-mono text-[#64748b] uppercase tracking-[0.15em]">
-                <span className="flex items-center gap-2"><Globe className="w-4 h-4 text-[var(--color-brand-teal)]" /> Global Reach</span>
-                <span className="flex items-center gap-2"><Building2 className="w-4 h-4 text-[var(--color-brand-blue)]" /> Enterprise Grade</span>
-                <span className="flex items-center gap-2"><Workflow className="w-4 h-4 text-white" /> Deep Workflow</span>
-              </div>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      <section className="py-24 bg-[var(--color-surface)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24">
-            {industriesData.map((industry) => (
-              <div key={industry.id} className="border-t border-[var(--color-border-light)] pt-8">
-                <h2 className="text-3xl font-bold text-[var(--color-brand-navy)] mb-4">{industry.title}</h2>
-                <p className="text-[var(--color-text-secondary)] text-lg leading-relaxed mb-8">
-                  {industry.description}
-                </p>
-                <div className="space-y-3">
-                  <h3 className="text-sm font-semibold tracking-wider uppercase text-[var(--color-brand-blue)] mb-4">Strategic Focus Areas</h3>
-                  {industry.features.map((feature, idx) => (
-                    <div key={idx} className="flex items-start gap-3">
-                      <div className="mt-2 w-1 h-1 bg-[var(--color-text-primary)] rounded-none shrink-0" />
-                      <span className="text-[var(--color-text-primary)]">{feature}</span>
+          {/* Sidebar Tabs */}
+          <div className="w-full lg:w-1/3 flex flex-col gap-3">
+            {industries.map((industry) => {
+              const isActive = activeTab === industry.id;
+              const Icon = industry.icon;
+              return (
+                <button
+                  key={industry.id}
+                  onClick={() => setActiveTab(industry.id)}
+                  className={`relative flex items-center justify-between p-4 rounded-xl text-left transition-all ${
+                    isActive 
+                      ? 'bg-white shadow-lg border border-slate-200 dark:bg-slate-800 dark:border-slate-700' 
+                      : 'hover:bg-slate-100 dark:hover:bg-slate-900/50 text-slate-500 dark:text-slate-400 border border-transparent'
+                  }`}
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeTabIndicator"
+                      className="absolute left-0 top-0 bottom-0 w-1 rounded-l-xl bg-gradient-to-b from-[#0055FF] to-[#00F0FF]"
+                    />
+                  )}
+                  <div className="flex items-center gap-4">
+                    <div className={`p-2 rounded-lg ${isActive ? `bg-gradient-to-br ${industry.color} text-white` : 'bg-slate-200 dark:bg-slate-800'}`}>
+                      <Icon className="w-5 h-5" />
                     </div>
-                  ))}
-                </div>
-              </div>
-            ))}
+                    <span className={`font-semibold ${isActive ? 'text-slate-900 dark:text-white' : ''}`}>
+                      {industry.name}
+                    </span>
+                  </div>
+                  <ChevronRight className={`w-5 h-5 transition-transform ${isActive ? 'rotate-90 text-[#0055FF] dark:text-[#00F0FF]' : 'opacity-0 -translate-x-4'}`} />
+                </button>
+              );
+            })}
           </div>
+
+          {/* Content Area */}
+          <div className="w-full lg:w-2/3 min-h-[400px]">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeIndustry.id}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+                className="bg-white rounded-3xl p-8 md:p-12 border border-slate-200 shadow-2xl relative overflow-hidden dark:bg-[#080B14] dark:border-slate-800/50"
+              >
+                {/* Decorative Background */}
+                <div className={`absolute top-0 right-0 w-96 h-96 bg-gradient-to-br ${activeIndustry.color} opacity-5 blur-[100px] rounded-full pointer-events-none`} />
+
+                <div className="relative z-10">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-sm font-semibold mb-6 border border-slate-200 dark:bg-slate-900 dark:text-slate-300 dark:border-slate-800">
+                    <activeIndustry.icon className="w-4 h-4" />
+                    {activeIndustry.name}
+                  </div>
+
+                  <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4 dark:text-white">
+                    {activeIndustry.tagline}
+                  </h2>
+                  
+                  <p className="text-slate-600 text-lg leading-relaxed mb-10 dark:text-slate-400">
+                    {activeIndustry.description}
+                  </p>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                    {activeIndustry.features.map((feature, i) => (
+                      <div key={i} className="flex items-center justify-center py-3 px-4 rounded-xl bg-slate-50 border border-slate-100 dark:bg-slate-900/50 dark:border-slate-800 text-center">
+                        <span className="font-semibold text-sm text-slate-900 dark:text-slate-200">
+                          {feature.name}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
         </div>
       </section>
-    </>
+
+    </AnimatedPage>
   );
 }

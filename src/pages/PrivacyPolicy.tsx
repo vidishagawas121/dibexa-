@@ -1,9 +1,10 @@
 import { Helmet } from 'react-helmet-async';
 import SectionHeader from '../components/ui/SectionHeader';
+import AnimatedPage from '../components/layout/AnimatedPage';
 
 export default function PrivacyPolicy() {
   return (
-    <>
+    <AnimatedPage className="bg-slate-50 min-h-screen font-sans text-slate-900 relative dark:bg-[#010103] dark:text-white">
       <Helmet>
         <title>Privacy Policy | Dibexa Infotech Pvt. Ltd.</title>
       </Helmet>
@@ -36,6 +37,6 @@ export default function PrivacyPolicy() {
           </div>
         </div>
       </section>
-    </>
+    </AnimatedPage>
   );
 }
