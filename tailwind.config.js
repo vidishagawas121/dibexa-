@@ -6,18 +6,9 @@ export default {
   ],
   theme: {
     extend: {
-      colors: {
-        primary: "var(--primary)",
-        secondary: "var(--secondary)",
-        accent: "var(--accent)",
-        background: "var(--background)",
-        surface: "var(--surface)",
-        text: "var(--text)",
-        muted: "var(--muted)",
-        border: "var(--border)",
-      },
       fontFamily: {
         sans: ["Inter", "sans-serif"],
+        display: ["Space Grotesk", "sans-serif"],
       },
     },
   },

@@ -40,28 +40,28 @@ export interface CompanyData {
 export const companyConfig: CompanyData = {
   companyName: "Dibexa Infotech Pvt. Ltd.",
   shortName: "Dibexa",
-  tagline: "Build. Automate. Scale.",
-  description: null, // [APPROVED COMPANY DESCRIPTION — TO BE PROVIDED BY MANAGEMENT]
-  vision: null, // [APPROVED VISION — TO BE PROVIDED BY MANAGEMENT]
-  mission: null, // [APPROVED MISSION — TO BE PROVIDED BY MANAGEMENT]
-  headquarters: "Pune, Maharashtra, India",
+  tagline: "Smart AI for Business Excellence.",
+  description: "Dibexa is a Pune-based AI startup dedicated to democratizing artificial intelligence. We provide world-class AI automation and software services tailored for modern Indian enterprises, helping them eliminate bottlenecks and scale seamlessly.",
+  vision: "To empower every Indian business, from scaling startups to multinational corporations, with accessible, high-performance AI technology.",
+  mission: "To deliver smart, customized AI solutions that drive business excellence and operational efficiency across the global market.",
+  headquarters: "City Vista, A 305, Downtown Rd, Ashoka Nagar, Kharadi, Pune, Maharashtra 411014, India",
   email: "dibexainfotech@gmail.com",
-  phone: null, // [OFFICIAL PHONE NUMBER — TO BE CONFIRMED]
+  phone: "+91 95276 05805",
   website: null, // [OFFICIAL WEBSITE DOMAIN — TO BE CONFIRMED]
   foundedYear: null, // [FOUNDED YEAR — TO BE CONFIRMED]
-  companySize: null, // [EMPLOYEE COUNT / COMPANY SIZE — TO BE CONFIRMED]
-  primaryMarket: null, // [INDIA / GLOBAL / BOTH — TO BE CONFIRMED]
-  targetCustomerType: null, // [STARTUPS / SMEs / MID-MARKET / ENTERPRISE / OTHER — TO BE CONFIRMED]
-  primaryGeographies: null, // [COUNTRIES / REGIONS — TO BE CONFIRMED]
+  companySize: "Startup",
+  primaryMarket: "India",
+  targetCustomerType: "Local Shops to MNCs",
+  primaryGeographies: "India",
   founder: null, // [FOUNDER NAME — TO BE CONFIRMED]
   leadership: null, // [LEADERSHIP INFORMATION TO BE PROVIDED]
   certifications: null, // [CERTIFICATIONS — TO BE PROVIDED]
   partnerships: null, // [TECHNOLOGY / BUSINESS PARTNERS — TO BE PROVIDED]
   socialLinks: {
-    facebook: null, // [FACEBOOK URL — TO BE PROVIDED]
-    linkedin: null, // [LINKEDIN URL — TO BE PROVIDED]
-    instagram: null, // [INSTAGRAM URL — TO BE PROVIDED]
-    youtube: null, // [YOUTUBE URL — TO BE PROVIDED]
-    whatsapp: null, // [WHATSAPP NUMBER / URL — TO BE PROVIDED]
+    facebook: "#",
+    linkedin: "#",
+    instagram: "#",
+    youtube: "#",
+    whatsapp: "#",
   }
 };
